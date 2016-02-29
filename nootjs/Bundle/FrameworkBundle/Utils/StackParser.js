@@ -23,6 +23,9 @@ module.exports = function() {
         var expression = new RegExp("at (.+) \((.+)\)");
         var matches = line.match(expression);
 
+        if(!matches) {
+            return {};
+        }
 
         var call = matches[1];
         var location = matches[2].substr(1);

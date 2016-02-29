@@ -57,13 +57,18 @@ var container = {
      * @returns {*}
      */
     get: function(id) {
+
+
         if(id == "container") {
             return this;
         }
+
         var service = this.services[id];
         if(!service) {
             throw new ServiceNotFoundException("Service with id '" + id + "' does not exist.");
         }
+
+
 
         this.instantiate(service);
         return service.instance;
@@ -76,23 +81,31 @@ var container = {
         eventDispatcher.dispatch("container.post_compile", this);
     },
 
+    /**
+     * TODO: Opschonen die hap
+     * @param service
+     * @returns {boolean}
+     */
     instantiate: function(service) {
+
         if(service.instance != undefined) {
             return false;
         }
 
-        var serviceClass = require(service.class);
-        if(typeof serviceClass == "function") {
-            service.instance = new serviceClass();
+        var ServiceClass = require(service.class);
+        if(typeof ServiceClass == "function") {
+            service.instance = new ServiceClass();
             if(service.arguments) {
+
                 var arguments = this.parseArguments(service.arguments);
-                serviceClass.apply(service.instance, arguments);
+                ServiceClass.apply(service.instance, arguments);
             }
         } else {
-            service.instance = serviceClass;
+            service.instance = ServiceClass;
         }
 
         // Calls
+
         if(service.calls) {
             for(var i = 0; i < service.calls.length; i++) {
                 var call = service.calls[i];
@@ -100,14 +113,13 @@ var container = {
 
                 var args = this.parseArguments(call[1]);
 
-                if(typeof serviceClass == "function") {
+                if(typeof ServiceClass == "function") {
                     service.instance[method].apply(service.instance, args);
                 } else {
-                    serviceClass[method].apply(service.instance, args);
+                    ServiceClass[method].apply(service.instance, args);
                 }
             }
         }
-
 
 
         return true;

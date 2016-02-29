@@ -1,0 +1,13 @@
+<html>
+<head>
+    <title>NootJS</title>
+    {#<link rel="stylesheet" type="text/css" href="{{ asset("/css/style.css") }}">#}
+</head>
+<body>
+<ul>
+    <li><a href="{{ path("app.default.index") }}">App:Default:Index</a></li>
+    <li><a href="{{ path("acme.default.index") }}">Acme:Default:Index</a></li>
+</ul>
+    {% block body %}{% endblock %}
+</body>
+</html>

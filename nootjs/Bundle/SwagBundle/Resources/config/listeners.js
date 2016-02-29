@@ -1,8 +1,8 @@
 module.exports = {
     "services": {
 
-        "nootjs.swag.exception_listener": {
-            "class": "nootjs/Bundle/SwagBundle/EventListener/KernelExceptionListener",
+        "nootjs.swag.error_listener": {
+            "class": "nootjs/Bundle/SwagBundle/EventListener/ErrorListener",
             "arguments": ["@container"],
             "tags": [
                 { name: "event_listener", event: "kernel.exception", method: "onKernelException" }

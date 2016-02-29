@@ -1,0 +1,11 @@
+<section class="nootjs-toolbar-success">
+    {{ collector.get("statusCode") }}
+</section>
+<section class="nootjs-toolbar-holder">
+    {{ collector.get("method") }} {{ collector.get("path") }}
+    {% if collector.get("route") %}
+        @ {{ collector.get("route").name }}
+    {% else %}
+        @ <em>Matched no route</em>
+    {% endif %}
+</section>

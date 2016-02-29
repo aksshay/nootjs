@@ -7,6 +7,8 @@ bundle.boot = function() {
     bundle.addConfig("listeners");
     bundle.addConfig("utils");
     bundle.addConfig("swag");
+    bundle.addConfig("collectors");
+    bundle.addConfig("routing");
 }
 
 

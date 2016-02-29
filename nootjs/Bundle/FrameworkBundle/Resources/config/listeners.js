@@ -1,8 +1,8 @@
 module.exports = {
     "services": {
 
-        "kernel.exception_listener": {
-            "class": "nootjs/Bundle/FrameworkBundle/EventListener/KernelExceptionListener",
+        "debug_listener": {
+            "class": "nootjs/Bundle/FrameworkBundle/EventListener/DebugListener",
             "arguments": ["@container"],
             "tags": [
                 { name: "event_listener", event: "kernel.exception", method: "onKernelException" }
@@ -14,6 +14,15 @@ module.exports = {
             "arguments": ["@container"],
             "tags": [
                 { name: "event_listener", event: "kernel.controller", method: "onKernelController" }
+            ]
+        },
+
+        "data_collector_listener": {
+            "class": "nootjs/Bundle/FrameworkBundle/EventListener/DataCollectorListener",
+            "arguments": ["@container"],
+            "tags": [
+                { name: "event_listener", event: "kernel.response", method: "onKernelResponse" },
+                { name: "event_listener", event: "kernel.request", method: "onKernelRequest" },
             ]
         },
 

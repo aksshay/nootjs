@@ -2,9 +2,9 @@ var AbstractController = require("nootjs/Bundle/FrameworkBundle/Http/Controller"
 
 var controller = new AbstractController();
 
-controller.errorAction = function(statusCode) {
+controller.errorAction = function(request, response, exception) {
     controller.render("NootjsSwagBundle:Error/error.html.twig", {
-        "statusCode": statusCode,
+        "statusCode": request.status,
     });
 }
 

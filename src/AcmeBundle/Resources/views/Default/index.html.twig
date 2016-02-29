@@ -1,10 +1,5 @@
-<html>
-<head>
-    <title>NootJS</title>
-    <link rel="stylesheet" type="text/css" href="{{ asset("css/style.css") }}">
-</head>
-<body>
+{% extends "AppBundle:layout.html.twig" %}
+{% block body %}
     <h1>AcmeBundle</h1>
-    <p><a href="{{ path("app.default.index", {"name": "Koen"}) }}">Andere pagina</a></p>
-</body>
-</html>
+    <p><a href="{{ path("app.default.index") }}">Andere pagina</a></p>
+{% endblock %}

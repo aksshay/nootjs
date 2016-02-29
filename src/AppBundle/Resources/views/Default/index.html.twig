@@ -1,14 +1,13 @@
-<html>
-<head>
-    <title>NootJS</title>
-    <link rel="stylesheet" type="text/css" href="{{ asset("/css/style.css") }}">
-</head>
-<body>
+{% extends "AppBundle:layout.html.twig" %}
+{% block body %}
+    <form method="POST">
+        <input name="name" value="{{ name }}">
+        <button>GO</button>
+    </form>
     <h1>AppBundle ({{ name }})</h1>
     <p><a href="{{ path("acme.default.index") }}">Andere pagina</a></p>
     <h2>Logs</h2>
     {% for log in logs %}
         {{ log.id }}: {{ log.body }}<br/>
     {% endfor %}
-</body>
-</html>
+{% endblock %}

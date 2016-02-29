@@ -1,22 +1,13 @@
 module.exports = {
     "services": {
         "kernel": {
-            "class": "nootjs/Bundle/FrameworkBundle/Http/Kernel",
+            "class": "app/AppKernel",
             "arguments": [],
         },
 
         "templating": {
             "class": "nootjs/Bundle/FrameworkBundle/Templating/Templating",
-            "arguments": ["@swag", "@kernel"],
-        },
-
-        "router": {
-            "class": "nootjs/Bundle/FrameworkBundle/Routing/Router",
-            "arguments": ["@kernel", "@router.matcher"],
-        },
-
-        "router.matcher": {
-            "class": "nootjs/Bundle/FrameworkBundle/Routing/Matcher",
+            "arguments": ["@swag"],
         },
 
         "event_dispatcher": {
@@ -32,14 +23,26 @@ module.exports = {
             ]
         },
 
+        "data_collector_chain": {
+            "class": "nootjs/Bundle/FrameworkBundle/DependencyInjection/Compiler/DataCollectorChain",
+            "calls": [
+                ["build", ["@container"]]
+            ]
+        },
+
         "http.controller_resolver": {
-            "class": "nootjs/Bundle/FrameworkBundle/Http/ControllerResolver",
+            "class": "nootjs/Component/HttpKernel/Resolver/ControllerResolver",
             "arguments": ["@container"]
         },
 
         "http.resource_resolver": {
-            "class": "nootjs/Bundle/FrameworkBundle/Http/ResourceResolver",
+            "class": "nootjs/Component/HttpKernel/Resolver//ResourceResolver",
             "arguments": ["@container"]
+        },
+
+        "http.request_enricher": {
+            "class": "nootjs/Component/HttpKernel/Utils//RequestEnricher",
+            "arguments": []
         },
     }
 }

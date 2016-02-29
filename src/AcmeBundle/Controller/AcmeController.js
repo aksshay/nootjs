@@ -1,5 +1,4 @@
-var AbstractController = require("nootjs/Bundle/FrameworkBundle/Http/Controller");
-
+var AbstractController = require("nootjs/Bundle/FrameworkBundle/Controller/Controller");
 var controller = new AbstractController();
 
 controller.indexAction = function() {

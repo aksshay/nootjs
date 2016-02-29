@@ -1,0 +1,8 @@
+<link rel="stylesheet" type="text/css" href="{{ asset("/bundles/NootjsFrameworkBundle/css/toolbar.css") }}">
+<div class="nootjs-toolbar">
+    {% for collector in collectors %}
+        <div class="nootjs-toolbar-block">
+            {{ collector.render() }}
+        </div>
+    {% endfor %}
+</div>

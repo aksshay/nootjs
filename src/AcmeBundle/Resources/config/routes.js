@@ -1,7 +1,7 @@
 module.exports = {
     "routes": {
         "acme.default.index": {
-            "pattern": "/",
+            "pattern": "/acme",
             "controller": "AcmeBundle:Acme:index",
         }
     }

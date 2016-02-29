@@ -2,12 +2,12 @@ module.exports = {
     "services": {
 
         "orm": {
-            "class": "nootjs/Bundle/OrmBundle/Utils/Orm",
+            "class": "nootjs/Component/Orm/Orm",
             "arguments": ["@orm.entity_manager"],
         },
 
         "orm.entity_manager": {
-            "class": "nootjs/Bundle/OrmBundle/Manager/EntityManager",
+            "class": "nootjs/Component/Orm/EntityManager",
             "arguments": [
                 "%database_host%",
                 "%database_user%",

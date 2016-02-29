@@ -1,15 +1,15 @@
-var AbstractController = require("nootjs/Bundle/FrameworkBundle/Http/Controller");
+var AbstractController = require("nootjs/Bundle/FrameworkBundle/Controller/Controller");
 
 var controller = new AbstractController();
 
-controller.indexAction = function(statusCode, exception) {
+controller.indexAction = function(request, response, exception) {
 
     var stackParser = controller.get("stack_parser");
 
     var stack = stackParser.parse(exception.stack);
 
     controller.render("NootjsFrameworkBundle:Debug/index.html.twig", {
-        "statusCode": statusCode,
+        "statusCode": response.status,
         "exception": exception,
         "stack": stack,
     });

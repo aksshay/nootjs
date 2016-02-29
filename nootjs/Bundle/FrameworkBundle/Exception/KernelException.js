@@ -4,10 +4,6 @@ exception = function(message)
     this.name = "KernelException";
     this.statusCode = 404;
 
-    this.getAction = function() {
-        return this.action;
-    }
-
     this.setAction = function(action) {
         this.action = action;
         return this;
