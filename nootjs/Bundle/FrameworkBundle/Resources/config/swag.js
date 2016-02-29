@@ -17,12 +17,5 @@ module.exports = {
             ]
         },
 
-        "nootjs.framework.swag.debug_extension": {
-            "class": "nootjs/Bundle/FrameworkBundle/Swag/DebugExtension",
-            "arguments": ["@swag", "@stack_parser"],
-            "tags": [
-                {"name": "swag_extension"},
-            ]
-        },
     }
 }

@@ -7,14 +7,18 @@ module.exports = function(container)
     {
         var em = this.container.get("orm.entity_manager");
         this.data = {
-            "amountOfQueries": em.queriesExecuted,
+            "executedQueries": em.getExecutedQueries(),
         };
     }
-    this.get = function(key) {
-        return this.data[key];
+
+    this.getExecutedQueries = function() {
+        return this.data["executedQueries"];
     }
+
     this.render = function() {
         var templating = this.container.get("templating");
-        return templating.render("NootjsOrmBundle:Collector/query.html.twig", {"collector": this});
+        return templating.render("NootjsOrmBundle:Collector/query.html.twig", {
+            "executedQueries": this.getExecutedQueries(),
+        });
     }
 }

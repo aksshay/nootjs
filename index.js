@@ -1,6 +1,7 @@
 process.env.NODE_PATH = __dirname;
 require('module').Module._initPaths();
 
+
 var http = require("http");
 var kernel = require("app/AppKernel");
 var port = 8080;

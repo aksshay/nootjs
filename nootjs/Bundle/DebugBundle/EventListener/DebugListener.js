@@ -9,7 +9,7 @@ module.exports = function(container) {
         }
 
         var controllerResolver = container.get("http.controller_resolver");
-        controllerResolver.selectController(event.request, event.response, "NootjsFrameworkBundle:Debug:index");
+        controllerResolver.selectController(event.request, event.response, "NootjsDebugBundle:Debug:index");
     }
 
 }

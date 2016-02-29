@@ -11,13 +11,13 @@ module.exports = {
         },
 
         "event_dispatcher": {
-            "class": "nootjs/Bundle/FrameworkBundle/EventDispatcher/EventDispatcher",
-            "arguments": ["@event_listener_chain"]
+            "class": "nootjs/Component/EventDispatcher/EventDispatcher",
+            "arguments": []
         },
 
 
-        "event_listener_chain": {
-            "class": "nootjs/Bundle/FrameworkBundle/DependencyInjection/Compiler/EventListenerChain",
+        "event_listener_pass": {
+            "class": "nootjs/Bundle/FrameworkBundle/DependencyInjection/Compiler/EventListenerPass",
             "calls": [
                 ["build", ["@container"]]
             ]
@@ -37,12 +37,17 @@ module.exports = {
 
         "http.resource_resolver": {
             "class": "nootjs/Component/HttpKernel/Resolver//ResourceResolver",
-            "arguments": ["@container"]
+            "arguments": ["@kernel"]
         },
 
         "http.request_enricher": {
             "class": "nootjs/Component/HttpKernel/Utils//RequestEnricher",
             "arguments": []
         },
+
+        "http.request_stack": {
+            class: "nootjs/Component/HttpFoundation/RequestStack",
+            arguments: [],
+        }
     }
 }

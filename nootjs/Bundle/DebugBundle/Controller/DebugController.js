@@ -8,7 +8,7 @@ controller.indexAction = function(request, response, exception) {
 
     var stack = stackParser.parse(exception.stack);
 
-    controller.render("NootjsFrameworkBundle:Debug/index.html.twig", {
+    controller.renderView("NootjsDebugBundle:Debug/index.html.twig", {
         "statusCode": response.status,
         "exception": exception,
         "stack": stack,

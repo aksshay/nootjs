@@ -13,7 +13,7 @@ var kernel = {
 	environment: "prod",
 	config: {},
 	rootDirectory: null,
-	container: require("nootjs/Bundle/FrameworkBundle/DependencyInjection/Container"),
+	container: require("nootjs/Component/DependencyInjection/Container"),
 	bundles: {},
 	baseUrl: null,
 
@@ -89,7 +89,7 @@ var kernel = {
 
 		this.configureBundles();
 
-		this.configureContainer();
+		this.buildContainer();
 
 		this.environment = environment || "prod";
 		this.loadAppConfig(environment);
@@ -117,7 +117,8 @@ var kernel = {
 	/**
 	 * Add all services to container
 	 */
-	configureContainer: function() {
+	buildContainer: function() {
+		var container = this.container;
 		var services = [];
 
 		for(var k in this.bundles) {
@@ -130,9 +131,9 @@ var kernel = {
 					services = merge(services, config.services);
 				}
 			}
+			bundle.build(container);
 		}
-
-		this.container.loadConfig(services);
+		container.build(services);
 	},
 
 	/**
@@ -174,6 +175,9 @@ var kernel = {
      */
 	handle: function(request, response) {
 
+		// TODO: Verplaatsen naar event listener
+		this.container.get("http.request_stack").add(request, response);
+
 		// Dispatch response event
 		var requestEvent = new KernelRequestEvent(request, response);
 		this.container.get("event_dispatcher").dispatch("kernel.request", requestEvent);
@@ -185,7 +189,6 @@ var kernel = {
 		var path = request.url;
 
 		try {
-			//throw new InvalidArgumentsException("Test.");
 
 			var matchedRoute = router.match(request);
 
@@ -194,6 +197,8 @@ var kernel = {
 				var resourceResolver = this.container.get("http.resource_resolver");
 				resourceResolver.resolve(request, response);
 			} else {
+
+				//throw new InvalidArgumentsException("Test.");
 
 				// Route matched, so resolve using controller
 				request.route = matchedRoute;
@@ -268,13 +273,16 @@ var kernel = {
 		var responseEvent = new KernelResponseEvent(request, response);
 		this.container.get("event_dispatcher").dispatch("kernel.response", responseEvent);
 
+
 		// Write response
 		response.writeHead(response.status, response.headers);
 		response.end(response.body);
 
+
 		// Dispatch finish request event
 		var finishRequestEvent = new KernelFinishRequestEvent(request, response);
 		this.container.get("event_dispatcher").dispatch("kernel.finish_request", finishRequestEvent);
+
 	}
 
 };

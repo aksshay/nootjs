@@ -1,0 +1,17 @@
+* {
+    font-family: "Calibri";
+}
+.stack-trace pre {
+    background-color: #ddd;
+    padding: 5px;
+    font-family: monospace;
+}
+.stack-trace pre * {
+    font-family: monospace;
+}
+.stack-trace pre em {
+    background-color: #fff;
+    color: #000;
+    font-weight: bold;
+    font-style: normal;
+}

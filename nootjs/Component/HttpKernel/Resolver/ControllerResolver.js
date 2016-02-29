@@ -28,14 +28,11 @@ module.exports = function(container) {
      * @param longName - Reference to controller class for example: AppBundle:Default:index
      * @returns {*}
      */
-    this.selectController = function(request, response, longName) {
+    this.selectController = function(request, response, controllerReference) {
 
-        var parts = longName.split(":");
-        var bundleName = parts[0];
-        var controllerName = parts[1] + "Controller";
-        var actionName = parts[2] + "Action";
+        var controllerSpecs = this.parseControllerReference(controllerReference);
 
-        var controller = this.instantiateController(bundleName, controllerName);
+        var controller = this.instantiateController(controllerSpecs.bundleName, controllerSpecs.controllerName);
 
         // Inject dependencies
         controller.setRequest(request);
@@ -44,9 +41,24 @@ module.exports = function(container) {
 
         // Update request
         request.controllerClass = controller;
-        request.controller = controller[actionName];
+        request.controller = controller[controllerSpecs.actionName];
 
         return controller;
+    }
+
+    /**
+     *
+     * @param reference
+     * @returns {{bundle: *, controller: *, action: *}}
+     */
+    this.parseControllerReference = function(controllerReference) {
+        var parts = controllerReference.split(":");
+
+        return {
+            bundleName: parts[0],
+            controllerName: parts[1] + "Controller",
+            actionName: parts[2] +"Action",
+        };
     }
 
     /**

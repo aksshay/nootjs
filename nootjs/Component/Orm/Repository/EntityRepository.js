@@ -21,16 +21,16 @@ var EntityRepository = function(em, entityName)
 
         var objectHash = this.em.getHash(this, id);
         if(!this.em.isManaged(objectHash)) {
-            var query = this.em.connection.query("SELECT * FROM " + this.entity.tableName + " WHERE " + this.idField + " = ?", [id]);
-            query.on("result", function (row) {
-                var object = this.buildObject(row);
-                this.em.manage(object);
+            var query = this.em.connection.query("SELECT * FROM " + this.entity.tableName + " WHERE " + this.idField + " = ?", [id], function(err, rows){
+                var object = null;
+                if(rows[0]) {
+                    object = this.buildObject(rows[0]);
+                    this.em.manage(object);
+                }
                 if(callback) {
                     callback(null, object);
                 }
-
                 syncResult.return(object);
-
             }.bind(this));
 
         } else {

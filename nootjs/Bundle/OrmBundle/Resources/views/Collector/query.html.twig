@@ -1,3 +1,14 @@
 <section class="nootjs-toolbar-holder">
-    {{ collector.get("amountOfQueries") }} query/queries executed
+    {{ executedQueries.length }}
+</section>
+<section class="nootjs-toolbar-holder">
+    <ol>
+        {% for query in executedQueries %}
+            <li>
+                Query: {{ query.queryString }}<br/>
+                Arguments: {{ query.args }}<br/>
+                Duration: {{ query.duration }}ms
+            </li>
+        {% endfor %}
+    </ol>
 </section>

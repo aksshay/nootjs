@@ -11,6 +11,10 @@ module.exports = function(swag, kernel)
     {
         // Asset function
         this.swag.setFunction("asset", function(path){
+
+            // Check if it points to a bundle's resource file
+            path = path.replace("@", "/bundles/");
+
             return kernel.getBaseUrl() + path;
         });
     }

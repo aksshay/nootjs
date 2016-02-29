@@ -1,4 +1,4 @@
-var AbstractBundle = require("nootjs/Bundle/FrameworkBundle/Bundle/AbstractBundle");
+var AbstractBundle = require("nootjs/Component/HttpKernel/Bundle/AbstractBundle");
 var bundle = new AbstractBundle();
 
 bundle.boot = function() {

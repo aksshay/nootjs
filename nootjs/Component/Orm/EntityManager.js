@@ -22,6 +22,7 @@ var EntityManager = function(hostname, username, password, database) {
     this.updatedObjects = [];
     this.insertedObjects = [];
     this.managedEntities = {};
+    this.executedQueries = [];
 
     /**
      * Load managed entities
@@ -45,6 +46,10 @@ var EntityManager = function(hostname, username, password, database) {
             this.managedObjects[objectHash] = object;
             this.insertedObjects[objectHash] = object;
         }
+    }
+
+    this.getExecutedQueries = function() {
+        return this.executedQueries;
     }
 
     /**
@@ -142,9 +147,15 @@ var EntityManager = function(hostname, username, password, database) {
     }
 
     this.executeQuery = function(queryString, args) {
+        var startTime = Date.now();
         this.connection.query(queryString, args, function(err){
-            this.queriesExecuted++;
-        }.bind(this));
+            var duration = Date.now() - startTime;
+            this.executedQueries.push({
+                queryString: queryString,
+                args: args,
+                duration: duration
+            });
+        }.bind(this, startTime));
     }
 
     /**

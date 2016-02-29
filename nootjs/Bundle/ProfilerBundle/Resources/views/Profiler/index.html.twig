@@ -1,0 +1,51 @@
+{% extends "NootjsProfilerBundle:layout.html.twig" %}
+{% block body %}
+    <h2>Requests</h2>
+    <table>
+        <tr>
+            <th>Status</th>
+            <th>Request</th>
+            <th>Route</th>
+            <th>Received at</th>
+        </tr>
+        {% for request in requests %}
+            <tr>
+                <td>{{ request.response.status }}</td>
+                <td>{{ request.request.method }} {{ request.request.url }}</td>
+                <td>{{ request.request.route.name }}</td>
+                <td>{{ request.request.receivedAt | date("H:i:s") }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <ul>
+        {% for request in requests %}
+            <li>
+                <h3>Request</h3>
+                <h4>Attributes</h4>
+                <ul>
+                    <li>Method => {{ request.request.method }}</li>
+                    <li>Path => {{ request.request.url }}</li>
+                    <li>Received at => {{ request.request.receivedAt | date("Y-m-d H:i:s") }}</li>
+                    <li>Controller => {{ request.request.route.controller }}</li>
+                </ul>
+                <h4>Headers</h4>
+                <ul>
+                    {% for key, value in request.request.headers %}
+                        <li>{{ key }} => {{ value }}</li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Response</h3>
+                Status: {{ request.response.status }}<br/>
+                <h4>Headers</h4>
+                <ul>
+                    {% for key, value in request.response.headers %}
+                        <li>{{ key }} => {{ value }}</li>
+                    {% endfor %}
+                </ul>
+
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

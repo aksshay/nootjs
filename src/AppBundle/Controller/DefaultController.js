@@ -1,5 +1,6 @@
 var AbstractController = require("nootjs/Bundle/FrameworkBundle/Controller/Controller");
 var controller = new AbstractController();
+var User = require("src/AppBundle/Entity/User");
 
 controller.indexAction = function(request, response) {
 
@@ -7,7 +8,17 @@ controller.indexAction = function(request, response) {
 
     var userRepository = em.getRepository("AppBundle:User");
 
-    var user = userRepository.find(1).sync();
+    var userId = 3;
+
+    var user = userRepository.find(userId).sync();
+
+    if(!user) {
+        var user = new User();
+        user.id = userId;
+        user.name = "Your name";
+        em.persist(user);
+        em.flush();
+    }
     var logs = user.getLogs().sync();
 
     if(request.method == "POST") {
@@ -16,10 +27,13 @@ controller.indexAction = function(request, response) {
         em.flush();
     }
 
-    this.render("AppBundle:Default/index.html.twig", {
+    this.render({
         "name": user.name,
         "logs": logs,
     });
+
+
+
 
 }
 

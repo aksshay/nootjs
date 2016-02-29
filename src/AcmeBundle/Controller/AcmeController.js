@@ -2,7 +2,8 @@ var AbstractController = require("nootjs/Bundle/FrameworkBundle/Controller/Contr
 var controller = new AbstractController();
 
 controller.indexAction = function() {
-    return this.render("AcmeBundle:Default/index.html.twig");
+    //this.redirectToRoute("app.default.index");
+    this.render();
 }
 
 module.exports = controller;

@@ -1,4 +1,5 @@
-var AbstractBundle = require("nootjs/Bundle/FrameworkBundle/Bundle/AbstractBundle");
+var AbstractBundle = require("nootjs/Component/HttpKernel/Bundle/AbstractBundle");
+var RegisterEventListenersPass = require("nootjs/Bundle/FrameworkBundle/DependencyInjection/Compiler/RegisterEventListenersPass");
 var bundle = new AbstractBundle();
 
 bundle.boot = function() {
@@ -15,6 +16,10 @@ bundle.boot = function() {
 bundle.processConfigs = function(configs, container) {
     var config = configs.config;;
     container.setParameter("debug", config.framework.debug);
+}
+
+bundle.build = function(container) {
+    container.addCompilerPass(new RegisterEventListenersPass());
 }
 
 module.exports = bundle;

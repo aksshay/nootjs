@@ -18,7 +18,7 @@ module.exports = function(container) {
         }
 
         var templating = container.get("templating");
-        response.body += templating.render("NootjsFrameworkBundle:Debug/toolbar.html.twig", {"collectors": dataCollectors});
+        response.body += templating.render("NootjsDebugBundle:Debug/toolbar.html.twig", {"collectors": dataCollectors});
 
     }
 

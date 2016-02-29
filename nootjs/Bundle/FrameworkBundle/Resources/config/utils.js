@@ -5,9 +5,5 @@ module.exports = {
             "class": "nootjs/Bundle/FrameworkBundle/Utils/ArgumentMatcher",
         },
 
-        "stack_parser": {
-            "class": "nootjs/Bundle/FrameworkBundle/Utils/StackParser",
-        },
-
     }
 }

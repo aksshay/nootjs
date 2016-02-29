@@ -1,10 +1,6 @@
-var fs = require("fs");
-var merge = require("merge");
-
 module.exports = function() {
 
-    this.onPreCompile = function(container) {
-
+    this.process = function(container) {
         var bundles = container.get("kernel").getRegisteredBundles();
         for(var k in bundles) {
             var bundle = bundles[k];
@@ -38,9 +34,4 @@ module.exports = function() {
         entityManager.connect();
     }
 
-
-
-    this.onPostCompile = function(bundle) {
-
-    }
 }

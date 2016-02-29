@@ -1,12 +1,14 @@
 var ServiceNotFoundException = require("nootjs/Bundle/FrameworkBundle/Exception/ServiceNotFoundException");
 var ParameterNotFoundException = require("nootjs/Bundle/FrameworkBundle/Exception/ParameterNotFoundException");
 var LogicException = require("nootjs/Bundle/FrameworkBundle/Exception/LogicException");
+var Compiler = require("nootjs/Component/DependencyInjection/Compiler/Compiler");
 
 var container = {
 
     services: {},
     parameters: {},
     isCompiled: false,
+    compiler: new Compiler(),
 
     /**
      * Add a new service
@@ -75,10 +77,11 @@ var container = {
     },
 
     compile: function() {
-        var eventDispatcher = this.get("event_dispatcher");
-        eventDispatcher.dispatch("container.pre_compile", this);
-        this.isCompiled = true;
-        eventDispatcher.dispatch("container.post_compile", this);
+        this.compiler.compile(this);
+    },
+
+    addCompilerPass: function(pass) {
+        this.compiler.addPass(pass);
     },
 
     /**
@@ -187,10 +190,10 @@ var container = {
     },
 
     /**
-     * Load services from config file
+     * Build container from config files
      * @param services
      */
-    loadConfig: function(services) {
+    build: function(services) {
         this.services = services;
     }
 };
