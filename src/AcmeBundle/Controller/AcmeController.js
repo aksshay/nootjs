@@ -6,8 +6,4 @@ controller.indexAction = function() {
     return this.render("AcmeBundle:Default/index.html.twig");
 }
 
-controller.getName = function() {
-    return "Acme";
-}
-
 module.exports = controller;

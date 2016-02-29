@@ -1,10 +1,20 @@
 var kernel = require("nootjs/Bundle/FrameworkBundle/Http/Kernel");
+var merge = require("merge");
 
-kernel.registerBundles = function() {
-    this.addBundle("nootjsFrameworkBundle", "nootjs/Bundle/FrameworkBundle/FrameworkBundle");
-    this.addBundle("nootjsSwigBundle", "nootjs/Bundle/SwigBundle/SwigBundle");
-    this.addBundle("AppBundle", "src/AppBundle/AppBundle");
-    this.addBundle("AcmeBundle", "src/AcmeBundle/AcmeBundle");
-}
+var nootjsBundles = {
+    "NootjsFrameworkBundle": "nootjs/Bundle/FrameworkBundle/FrameworkBundle",
+    "NootjsSwagBundle": "nootjs/Bundle/SwagBundle/SwagBundle",
+    "NootjsOrmBundle": "nootjs/Bundle/OrmBundle/OrmBundle",
+};
+var appBundles = {
+    "AppBundle": "src/AppBundle/AppBundle",
+    "AcmeBundle": "src/AcmeBundle/AcmeBundle",
+};
+var thirdPartyBundles = {
+
+};
+var bundles = merge(nootjsBundles, appBundles, thirdPartyBundles);
+
+kernel.registerBundles(bundles);
 
 module.exports = kernel;

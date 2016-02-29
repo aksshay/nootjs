@@ -1,5 +1,5 @@
 module.exports = {
     "framework": {
-        "debug": false
+        "debug": true
     }
 };

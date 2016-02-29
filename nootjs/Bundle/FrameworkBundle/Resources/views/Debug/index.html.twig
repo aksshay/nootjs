@@ -1,0 +1,28 @@
+<html>
+<head>
+    <title>NootJS</title>
+    <link rel="stylesheet" type="text/css" href="{{ asset("/bundles/NootjsFrameworkBundle/css/debug.css") }}">
+</head>
+<body>
+    <h1>An error has occurred:</h1>
+    <h2>
+        {{ exception.message }}
+    </h2>
+    {{ statusCode }} - {{ exception.name }}<br/>
+    {% if exception.stack %}
+        <h3>Stacktrace:</h3>
+        <ol class="stack-trace">
+            {% for trace in stack %}
+                <li>
+                    <div>
+                        at <strong>{{ trace.call }}</strong>
+                        in <strong>{{ trace.filePath }}</strong>
+                        at line <strong>{{ trace.line }}</strong>
+                        <pre>{% for line in trace.lines %}{{ trace.start + loop.index }}. {% if (trace.start + loop.index) == trace.line %}<em>{{ line }}</em>{% else %}{{ line }}{% endif %}<br/>{% endfor %}</pre>
+                    </div>
+                </li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+</body>
+</html>

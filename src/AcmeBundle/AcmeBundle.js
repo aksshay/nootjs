@@ -1,6 +1,9 @@
-module.exports = {
-    configs: [
-        require("./Resources/config/services"),
-        require("./Resources/config/routes"),
-    ],
-};
+var AbstractBundle = require("nootjs/Bundle/FrameworkBundle/Bundle/AbstractBundle");
+var bundle = new AbstractBundle();
+
+bundle.boot = function() {
+    bundle.addConfig("services");
+    bundle.addConfig("routes");
+}
+
+module.exports = bundle;
