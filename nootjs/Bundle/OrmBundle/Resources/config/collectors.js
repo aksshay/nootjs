@@ -1,8 +1,8 @@
 module.exports = {
     "services": {
 
-        "orm.query_collector": {
-            "class": "nootjs/Bundle/OrmBundle/DataCollector/QueryCollector",
+        "orm.query_data_collector": {
+            "class": "nootjs/Component/Orm/DataCollector/QueryDataCollector",
             "arguments": ["@container"],
             "tags": [
                 { name: "data_collector" }

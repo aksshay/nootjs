@@ -1,3 +1,6 @@
+var fs = require("fs");
+var merge = require("merge");
+
 module.exports = function() {
 
     this.process = function(container) {

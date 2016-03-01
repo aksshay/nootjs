@@ -1,0 +1,11 @@
+<link rel="stylesheet" type="text/css" href="{{ asset("/bundles/NootjsProfilerBundle/css/bar.css") }}">
+<div class="nootjs-toolbar">
+    {% for collector in collectors %}
+        <div class="nootjs-toolbar-block">
+            {{ collector.render() }}
+        </div>
+    {% endfor %}
+    <div class="nootjs-toolbar-block">
+        <a href="{{ path("nootjs.profiler.index") }}">Open profiler</a>
+    </div>
+</div>

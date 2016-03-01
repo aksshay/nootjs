@@ -6,6 +6,7 @@ module.exports = function() {
         request.protocol = request.protocol || "http://";
         request.body = "";
         request.request = {};
+        request.attributes = {};
         request.query = url.parse(request.url, true).query;
 
         request.receivedAt = Date.now();

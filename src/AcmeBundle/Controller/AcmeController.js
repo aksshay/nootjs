@@ -3,7 +3,7 @@ var controller = new AbstractController();
 
 controller.indexAction = function() {
     //this.redirectToRoute("app.default.index");
-    this.render();
+    controller.render();
 }
 
 module.exports = controller;

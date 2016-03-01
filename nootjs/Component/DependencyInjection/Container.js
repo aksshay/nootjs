@@ -1,6 +1,8 @@
-var ServiceNotFoundException = require("nootjs/Bundle/FrameworkBundle/Exception/ServiceNotFoundException");
-var ParameterNotFoundException = require("nootjs/Bundle/FrameworkBundle/Exception/ParameterNotFoundException");
-var LogicException = require("nootjs/Bundle/FrameworkBundle/Exception/LogicException");
+var LogicException = require("nootjs/Component/Exception/Exception/LogicException");
+
+var ServiceNotFoundException = require("nootjs/Component/DependencyInjection/Exception/ServiceNotFoundException");
+var ParameterNotFoundException = require("nootjs/Component/DependencyInjection/Exception/ParameterNotFoundException");
+
 var Compiler = require("nootjs/Component/DependencyInjection/Compiler/Compiler");
 
 var container = {
@@ -65,15 +67,27 @@ var container = {
             return this;
         }
 
-        var service = this.services[id];
-        if(!service) {
-            throw new ServiceNotFoundException("Service with id '" + id + "' does not exist.");
-        }
-
-
+        var service = this.findDefinition(id);
 
         this.instantiate(service);
         return service.instance;
+    },
+
+    findDefinition: function(id) {
+        var definition = this.services[id];
+        if(!definition) {
+            throw new ServiceNotFoundException("Definition with id '" + id + "' does not exist.");
+        }
+
+        if(!definition.arguments) {
+            definition.arguments = [];
+        }
+
+        if(!definition.calls) {
+            definition.calls = [];
+        }
+
+        return definition;
     },
 
     compile: function() {
@@ -115,7 +129,6 @@ var container = {
                 var method = call[0];
 
                 var args = this.parseArguments(call[1]);
-
                 if(typeof ServiceClass == "function") {
                     service.instance[method].apply(service.instance, args);
                 } else {
@@ -128,13 +141,8 @@ var container = {
         return true;
     },
 
-    /**
-     * Find services by tag
-     * @param tag
-     * @returns {Array}
-     */
-    findByTag: function(tagName) {
-        var taggedServices = [];
+    findTaggedServices: function(tagName) {
+        var taggedServices = {};
         for(var key in this.services) {
 
             var service = this.services[key];
@@ -142,11 +150,7 @@ var container = {
                 for(var i = 0; i < service.tags.length; i++) {
                     var tag = service.tags[i];
                     if(tag.name == tagName) {
-                        this.instantiate(service);
-                        taggedServices.push({
-                            "instance": service.instance,
-                            "tag": tag,
-                        });
+                        taggedServices[key] = service;
                     }
                 }
             }

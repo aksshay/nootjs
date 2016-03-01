@@ -66,7 +66,7 @@ var Controller = function(){
 	}
 
 	this.getSpecs = function() {
-		return this.get("http.controller_resolver").parseControllerReference(this.request.route.controller);
+		return this.get("http.controller_resolver").parseControllerReference(this.request.attributes.controller);
 	}
 
 	this.guessView = function() {

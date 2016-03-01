@@ -4,7 +4,7 @@ var User = require("src/AppBundle/Entity/User");
 
 controller.indexAction = function(request, response) {
 
-    var em = this.getOrm().getEntityManager();
+    var em = controller.getOrm().getEntityManager();
 
     var userRepository = em.getRepository("AppBundle:User");
 
@@ -27,14 +27,10 @@ controller.indexAction = function(request, response) {
         em.flush();
     }
 
-    this.render({
+    controller.render({
         "name": user.name,
         "logs": logs,
     });
-
-
-
-
 }
 
 module.exports = controller;

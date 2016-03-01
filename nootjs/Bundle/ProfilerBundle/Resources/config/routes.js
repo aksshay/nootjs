@@ -1,6 +1,6 @@
 module.exports = {
     "routes": {
-        "nootjs.profiler": {
+        "nootjs.profiler.index": {
             "pattern": "/_profiler",
             "controller": "NootjsProfilerBundle:Profiler:index",
         }

@@ -1,4 +1,4 @@
-var HttpException = require("nootjs/Component/HttpKernel/Exception/HttpException");
+var HttpException = require("./HttpException");
 
 exception = function(message)
 {

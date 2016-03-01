@@ -1,12 +1,16 @@
 var fs = require("fs");
 var util = require("util")
 var merge = require("merge");
-var KernelExceptionEvent = require("nootjs/Bundle/FrameworkBundle/Event/KernelExceptionEvent");
-var KernelRequestEvent = require("nootjs/Bundle/FrameworkBundle/Event/KernelResponseEvent");
-var KernelResponseEvent = require("nootjs/Bundle/FrameworkBundle/Event/KernelResponseEvent");
-var KernelFinishRequestEvent = require("nootjs/Bundle/FrameworkBundle/Event/KernelFinishRequestEvent");
-var InvalidArgumentsException = require("nootjs/Bundle/FrameworkBundle/Exception/InvalidArgumentsException");
-var KernelControllerEvent = require("nootjs/Bundle/FrameworkBundle/Event/KernelControllerEvent");
+
+// Exceptions
+var InvalidArgumentException = require("nootjs/Component/Exception/Exception/InvalidArgumentException");
+
+// Events
+var KernelExceptionEvent = require("nootjs/Component/HttpKernel/Event/KernelExceptionEvent");
+var KernelRequestEvent = require("nootjs/Component/HttpKernel/Event/KernelResponseEvent");
+var KernelResponseEvent = require("nootjs/Component/HttpKernel/Event/KernelResponseEvent");
+var KernelFinishRequestEvent = require("nootjs/Component/HttpKernel/Event/KernelFinishRequestEvent");
+var KernelControllerEvent = require("nootjs/Component/HttpKernel/Event/KernelControllerEvent");
 
 var kernel = {
 
@@ -60,7 +64,7 @@ var kernel = {
 
 	getBundle: function(name) {
 		if(!this.bundles[name]) {
-			throw new InvalidArgumentsException("Bundle '"+name+"' does not exist.");
+			throw new InvalidArgumentException("Bundle '"+name+"' does not exist.");
 		}
 		return this.bundles[name];
 	},
@@ -94,12 +98,12 @@ var kernel = {
 		this.environment = environment || "prod";
 		this.loadAppConfig(environment);
 
-
 		this.container.compile();
 
-		this.container.get("swag").loadExtensions();
-
 		this.container.get("router").boot();
+
+		this.eventDispatcher = this.container.get("event_dispatcher");
+		this.controllerResolver = this.container.get("http.controller_resolver");
 
 
 	},
@@ -175,112 +179,44 @@ var kernel = {
      */
 	handle: function(request, response) {
 
-		// TODO: Verplaatsen naar event listener
-		this.container.get("http.request_stack").add(request, response);
-
-		// Dispatch response event
-		var requestEvent = new KernelRequestEvent(request, response);
-		this.container.get("event_dispatcher").dispatch("kernel.request", requestEvent);
-
-		this.baseUrl = request.protocol + request.headers.host;
-
-		var router = this.container.get("router");
-
-		var path = request.url;
-
 		try {
+			// TODO: Move somewhere else
+			this.baseUrl = request.protocol + request.headers.host;
 
-			var matchedRoute = router.match(request);
+			// Dispatch KernelRequestEvent
+			this.eventDispatcher.dispatch("kernel.request", new KernelRequestEvent(this, request, response));
 
-			// No route found, try to serve static resource
-			if(!matchedRoute) {
-				var resourceResolver = this.container.get("http.resource_resolver");
-				resourceResolver.resolve(request, response);
-			} else {
+			// Resolve controller and arguments
+			var controller = this.controllerResolver.getController(request, response);
+			var arguments = this.controllerResolver.getArguments(request, response, controller);
 
-				//throw new InvalidArgumentsException("Test.");
+			// kernel.controller event
+			this.eventDispatcher.dispatch("kernel.controller", new KernelControllerEvent(this, request, response));
 
-				// Route matched, so resolve using controller
-				request.route = matchedRoute;
-				response.status = 200;
-				var controllerResolver = this.container.get("http.controller_resolver");
-				controllerResolver.resolve(request, response);
-			}
+			// Execute controller
+			controller.apply(controller, arguments);
 
-		} catch(exception) {
-			response.status = exception.statusCode || 500;
+		} catch(err) {
 
-			// Default error page
-			request.controller = this.defaultErrorController;
+			// Dispatch KernelExceptionEvent
+			this.container.get("event_dispatcher").dispatch("kernel.exception", new KernelExceptionEvent(this, request, response, err));
 
-			// Create KernelExceptionEvent
-			var event = new KernelExceptionEvent(request, response);
-			event.setException(exception);
-			// And dispatch it
-			this.container.get("event_dispatcher").dispatch("kernel.exception", event);
-
-			this.executeController(request, response, {
-				"request": request,
-				"response": response,
-				"exception": exception,
-			});
-		}
-
-	},
-
-	defaultErrorController: function(request, response, exception){
-		response.status = 500;
-		response.headers = {
-			"Content-Type": "text/html"
-		};
-		response.body = "An error has occurred ("+response.status+")";
-		kernel.sendResponse(request, response);
-	},
-
-	/**
-	 * Execute request.controller
-	 * @param request
-	 * @param response
-	 * @param arguments
-     */
-	executeController: function(request, response, arguments) {
-
-		// Add request and response to arguments
-		arguments.request = request;
-		arguments.response = response;
-
-		// Create controller event and dispatch it
-		var eventDispatcher = this.container.get("event_dispatcher");
-		var event = new KernelControllerEvent(request, response);
-		eventDispatcher.dispatch("kernel.controller", event);
-
-
-		var controllerClass = request.controllerClass;
-		var controllerMethod = request.controller;
-		var matchedArguments = this.container.get("argument_matcher").match(request.controller, arguments);
-
-		if(controllerClass) {
-			controllerMethod.apply(controllerClass, matchedArguments);
-		} else {
-			controllerMethod.apply(controllerMethod, matchedArguments);
 		}
 
 	},
 
 	sendResponse: function(request, response) {
 
-		// Dispatch response event
-		var responseEvent = new KernelResponseEvent(request, response);
+		// Dispatch KernelResponseEvent
+		var responseEvent = new KernelResponseEvent(this, request, response);
 		this.container.get("event_dispatcher").dispatch("kernel.response", responseEvent);
-
 
 		// Write response
 		response.writeHead(response.status, response.headers);
 		response.end(response.body);
 
-
-		// Dispatch finish request event
-		var finishRequestEvent = new KernelFinishRequestEvent(request, response);
+		// Dispatch KernelFinishRequestEvent
+		var finishRequestEvent = new KernelFinishRequestEvent(this, request, response);
 		this.container.get("event_dispatcher").dispatch("kernel.finish_request", finishRequestEvent);
 
 	}

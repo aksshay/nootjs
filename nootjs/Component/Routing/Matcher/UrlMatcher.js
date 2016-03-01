@@ -94,7 +94,12 @@ module.exports = function()
         return params;
     };
 
-    this.getArgs = function(path, pattern) {
+    this.getArgs = function(request) {
+        if(!request.attributes.route) {
+            return {};
+        }
+        var path = request.url;
+        var pattern = request.attributes.route.pattern;
         var params = this.getParams(pattern);
         var matches = this.getMatches(path, pattern);
         var args = {};

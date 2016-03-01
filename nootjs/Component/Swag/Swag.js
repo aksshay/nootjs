@@ -1,9 +1,7 @@
 var merge = require("merge");
-var fsloader = require("nootjs/Component/Swag/Loaders/Filesystem");
 
-module.exports = function(extensionChain, loader)
+module.exports = function(loader)
 {
-    this.extensionChain = extensionChain;
 
     if(loader) {
         this.swig = require("swig");
@@ -13,18 +11,6 @@ module.exports = function(extensionChain, loader)
     }
 
     this.functions = {};
-
-    /**
-     * Load extensions
-     */
-    this.loadExtensions = function()
-    {
-        var extensions = this.extensionChain.getExtensions();
-        for(var i = 0; i < extensions.length; i++) {
-            var extension = extensions[i];
-            this.addExtension(extension);
-        }
-    }
 
     /**
      * Add new extension

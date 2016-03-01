@@ -8,7 +8,7 @@ bundle.boot = function() {
     bundle.addConfig("collectors");
 }
 
-this.build = function(container) {
+bundle.build = function(container) {
     container.addCompilerPass(new MappingPass());
 }
 

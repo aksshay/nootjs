@@ -1,8 +1,8 @@
 var fs = require("fs");
 var merge = require("merge");
 var querystring = require("querystring");
-var RouteNotFoundException = require("nootjs/Bundle/FrameworkBundle/Exception/RouteNotFoundException");
-var InvalidArgumentsException = require("nootjs/Bundle/FrameworkBundle/Exception/InvalidArgumentsException");
+var RouteNotFoundException = require("nootjs/Component/Routing/Exception/RouteNotFoundException");
+var InvalidArgumentException = require("nootjs/Component/Exception/Exception/InvalidArgumentException");
 
 var router = function(kernel, urlMatcher)
 {
@@ -46,7 +46,7 @@ var router = function(kernel, urlMatcher)
         for(var i = 0; i < params.length; i++) {
             var param = params[i];
             if(!args[param]) {
-                throw new InvalidArgumentsException("Route (" + name + ") contains invalid arguments");
+                throw new InvalidArgumentException("Route (" + name + ") contains invalid arguments");
             }
         }
 

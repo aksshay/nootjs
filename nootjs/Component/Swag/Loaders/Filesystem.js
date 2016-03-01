@@ -1,8 +1,8 @@
 var fs = require('fs');
 
-module.exports = function (viewResolver) {
+module.exports = function (pathResolver) {
 
-    this.viewResolver = viewResolver;
+    this.pathResolver = pathResolver;
 
     encoding = "utf8";
 
@@ -20,7 +20,7 @@ module.exports = function (viewResolver) {
     };
 
     this.resolve = function(to, from) {
-        return this.viewResolver.resolve(to);
+        return this.pathResolver.resolve(to);
     }
 
 };

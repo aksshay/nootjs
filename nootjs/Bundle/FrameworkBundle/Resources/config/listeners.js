@@ -1,28 +1,19 @@
 module.exports = {
     "services": {
 
-        "kernel.controller_listener": {
-            "class": "nootjs/Bundle/FrameworkBundle/EventListener/KernelControllerListener",
-            "arguments": ["@container"],
+        "router_listener": {
+            "class": "nootjs/Component/Routing/EventListener/RouterListener",
+            "arguments": ["@router"],
             "tags": [
-                { name: "event_listener", event: "kernel.controller", method: "onKernelController" }
+                { name: "event_listener", event: "kernel.request", method: "onKernelRequest" }
             ]
         },
 
-        "data_collector_listener": {
-            "class": "nootjs/Bundle/FrameworkBundle/EventListener/DataCollectorListener",
-            "arguments": ["@container"],
+        "request_stack_listener": {
+            "class": "nootjs/Component/HttpFoundation/EventListener/RequestStackListener",
+            "arguments": ["@http.request_stack"],
             "tags": [
-                { name: "event_listener", event: "kernel.response", method: "onKernelResponse" },
-                { name: "event_listener", event: "kernel.request", method: "onKernelRequest" },
-            ]
-        },
-
-        "kernel.finish_request_listener": {
-            "class": "nootjs/Bundle/FrameworkBundle/EventListener/KernelFinishRequestListener",
-            "arguments": ["@container"],
-            "tags": [
-                { name: "event_listener", event: "kernel.finish_request", method: "onKernelFinishRequest" }
+                { name: "event_listener", event: "kernel.request", method: "onKernelRequest" }
             ]
         },
 

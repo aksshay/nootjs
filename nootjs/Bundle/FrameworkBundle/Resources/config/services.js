@@ -11,20 +11,12 @@ module.exports = {
         },
 
         "event_dispatcher": {
-            "class": "nootjs/Component/EventDispatcher/EventDispatcher",
-            "arguments": []
+            "class": "nootjs/Component/EventDispatcher/ContainerAwareEventDispatcher",
+            "arguments": ["@container"]
         },
-
 
         "event_listener_pass": {
             "class": "nootjs/Bundle/FrameworkBundle/DependencyInjection/Compiler/EventListenerPass",
-            "calls": [
-                ["build", ["@container"]]
-            ]
-        },
-
-        "data_collector_chain": {
-            "class": "nootjs/Bundle/FrameworkBundle/DependencyInjection/Compiler/DataCollectorChain",
             "calls": [
                 ["build", ["@container"]]
             ]
@@ -48,6 +40,10 @@ module.exports = {
         "http.request_stack": {
             class: "nootjs/Component/HttpFoundation/RequestStack",
             arguments: [],
-        }
+        },
+
+        "argument_matcher": {
+            "class": "nootjs/Component/ArgumentMatcher/ArgumentMatcher",
+        },
     }
 }

@@ -4,11 +4,10 @@ var controller = new AbstractController();
 
 controller.indexAction = function(request, response) {
 
-    var requests = this.get("http.request_stack").getAll();
-    requests.reverse();
+    var requests = controller.get("http.request_stack").getAll();
 
     controller.render({
-        requests: requests,
+        requests: requests.reverse(),
     });
 
 }

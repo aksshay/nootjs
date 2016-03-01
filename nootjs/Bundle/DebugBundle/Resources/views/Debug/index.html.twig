@@ -1,14 +1,14 @@
 <html>
 <head>
     <title>NootJS</title>
-    <link rel="stylesheet" type="text/css" href="{{ asset("/bundles/NootjsFrameworkBundle/css/debug.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset("/bundles/NootjsDebugBundle/css/debug.css") }}">
 </head>
 <body>
     <h1>An error has occurred:</h1>
     <h2>
         {{ exception.message }}
     </h2>
-    {{ statusCode }} - {{ exception.name }}<br/>
+    {{ status }} - {{ exception.name }}<br/>
     {% if exception.stack %}
         <h3>Stacktrace:</h3>
         <ol class="stack-trace">

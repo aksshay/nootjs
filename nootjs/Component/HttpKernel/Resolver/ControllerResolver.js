@@ -9,29 +9,10 @@ module.exports = function(container) {
      * @param request
      * @param response
      */
-    this.resolve = function(request, response) {
+    this.getController = function(request, response) {
 
-        var route = request.route;
-        var path = request.url;
-
-        // Select controller based on route config
-        this.selectController(request, response, route.controller);
-
-        // Retrieve arguments from path
-        var arguments = this.container.get("router.url_matcher").getArgs(path, route.pattern);
-
-        this.container.get("kernel").executeController(request, response, arguments);
-    }
-
-    /**
-     * Return new controller instance
-     * @param longName - Reference to controller class for example: AppBundle:Default:index
-     * @returns {*}
-     */
-    this.selectController = function(request, response, controllerReference) {
-
-        var controllerSpecs = this.parseControllerReference(controllerReference);
-
+        // Instantiate controller according to controller attribute
+        var controllerSpecs = this.parseControllerReference(request.attributes.controller);
         var controller = this.instantiateController(controllerSpecs.bundleName, controllerSpecs.controllerName);
 
         // Inject dependencies
@@ -39,11 +20,22 @@ module.exports = function(container) {
         controller.setResponse(response);
         controller.setContainer(this.container);
 
-        // Update request
-        request.controllerClass = controller;
-        request.controller = controller[controllerSpecs.actionName];
+        return controller[controllerSpecs.actionName];
+    }
 
-        return controller;
+    this.getArguments = function(request, response, controller) {
+
+        // Retrieve arguments from path
+        var arguments = this.container.get("router.url_matcher").getArgs(request);
+
+        // Add request and response to arguments
+        arguments.request = request;
+        arguments.response = response;
+
+        // Match them to the controller's parameters
+        var matchedArguments = this.container.get("argument_matcher").match(controller, arguments);
+
+        return matchedArguments;
     }
 
     /**
