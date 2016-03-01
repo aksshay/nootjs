@@ -52,8 +52,6 @@ var kernel = {
 		this.bundles[bundleName].directory = bundleDirectory;
 	},
 
-
-
 	getCacheDirectory: function() {
 		return this.getRootDirectory() + "/var/cache";
 	},

@@ -1,5 +1,19 @@
 {% extends "NootjsProfilerBundle:layout.html.twig" %}
 {% block body %}
+    <h2>Queries</h2>
+    {% for query in collector.getExecutedQueries() %}
+        <li>
+            Query: {{ query.queryString }}<br/>
+            Arguments:
+                {% for arg in query.args %}
+                    {{ arg }},
+                {% endfor %}
+            <br/>
+
+
+            Duration: {{ query.duration }}ms
+        </li>
+    {% endfor %}
     <h2>Requests</h2>
     <table>
         <tr>

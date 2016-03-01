@@ -21,7 +21,21 @@ var EntityRepository = function(em, entityName)
 
         var objectHash = this.em.getHash(this, id);
         if(!this.em.isManaged(objectHash)) {
-            var query = this.em.connection.query("SELECT * FROM " + this.entity.tableName + " WHERE " + this.idField + " = ?", [id], function(err, rows){
+            var startTime = Date.now();
+            var queryString = "SELECT * FROM " + this.entity.tableName + " WHERE " + this.idField + " = ?";
+            var args = [id];
+            var query = this.em.connection.query(queryString, args, function(err, rows){
+
+                var endTime = Date.now();
+                var duration = endTime - startTime;
+                this.em.executedQueries.push({
+                    queryString: queryString,
+                    args: args,
+                    duration: duration,
+                    startTime: startTime,
+                    endTime: endTime,
+                });
+
                 var object = null;
                 if(rows[0]) {
                     object = this.buildObject(rows[0]);

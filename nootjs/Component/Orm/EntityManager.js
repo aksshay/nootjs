@@ -146,16 +146,22 @@ var EntityManager = function(hostname, username, password, database) {
         this.executeQuery(queryString, args);
     }
 
-    this.executeQuery = function(queryString, args) {
+    this.executeQuery = function(queryString, args, callback) {
         var startTime = Date.now();
-        this.connection.query(queryString, args, function(err){
-            var duration = Date.now() - startTime;
+        this.connection.query(queryString, args, function(err, results){
+            var endTime = Date.now();
+            var duration = endTime - startTime;
             this.executedQueries.push({
                 queryString: queryString,
                 args: args,
-                duration: duration
+                duration: duration,
+                startTime: startTime,
+                endTime: endTime,
             });
-        }.bind(this, startTime));
+            if(callback) {
+                callback(err, results);
+            }
+        }.bind(this, startTime, callback));
     }
 
     /**
